@@ -334,6 +334,21 @@
         }
 
         /* Projects Section */
+        carousel {
+      display: flex;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      scroll-snap-type: x mandatory;
+      gap: 2rem;
+      padding: 2rem;
+      perspective: 1000px;
+      scrollbar-width: none;
+    }
+    .carousel::-webkit-scrollbar {
+      display: none;
+    }
+
+
         #projects {
             padding: 80px 20px 100px;
             background: #0A0F2C;
@@ -347,141 +362,161 @@
             margin: 0 auto;
         }
 
-        .project-card {
-            background: #1b1740;
-            border-radius: 15px;
-            padding: 15px;
-            color: #C1C1C1;
-            cursor: pointer;
-            box-shadow: 0 6px 15px rgba(18, 11, 48, 0.7);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
-        }
 
-        .project-card:hover {
-            transform: scale(1.04);
-            box-shadow: 0 10px 30px #00F0FFaa;
-            z-index: 1;
-        }
+        /* Existing styles unchanged except for added 3D carousel styles */
 
-        .project-card .project-img {
-            width: 100%;
-            height: 160px;
-            background: #2a254f;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            overflow: hidden;
-            position: relative;
-            background-size: cover;
-            background-position: center;
-            box-shadow: inset 0 0 15px #00F0FF44;
-        }
+.carousel {
+    display: flex;
+    overflow-x: scroll;
+    scroll-snap-type: none;
+    -webkit-overflow-scrolling: touch;
+    gap: 1rem;
+    scrollbar-width: none;
+    perspective: 1200px; /* needed for 3D effect */
+    user-select: none;
+    padding: 7rem 10vw 4rem; /* Add horizontal padding (10vw) */
+    scroll-padding-left: 10vw; /* Optional for scroll snap support */
+    scroll-padding-right: 10vw;
 
-        .project-card .project-title {
-            font-size: 1.3rem;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: #B983FF;
-        }
 
-        .project-card .project-desc {
-            font-size: 0.95rem;
-            color: #c1c1c1;
-            flex-grow: 1;
-        }
+}
 
-        .project-card .btn-view {
-            margin-top: 15px;
-            align-self: flex-start;
-            background: #00F0FF;
-            color: #0A0F2C;
-            padding: 8px 18px;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 0 10px #00F0FFcc;
-            transition: background-color 0.3s ease;
-        }
+.carousel::-webkit-scrollbar {
+    display: none;
+}
 
-        .project-card .btn-view:hover {
-            background: #B983FF;
-            box-shadow: 0 0 20px #B983FFcc;
-        }
+/* Keep your card styles but add transform origin center-bottom for nice scale effect */
 
-        /* Modal Overlay */
-        #modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.85);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-        }
+.project-card {
+    flex: 0 0 280px;
+    background: #1a1a2e;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    z-index: 0;
+    transform-origin: center bottom;
+    /* Remove scroll-snap-align for smoother transform */
+}
 
-        #modal.active {
-            display: flex;
-        }
+/* Remove .popout transform because we will handle with JS */
 
-        #modal .modal-content {
-            background: #0A0F2C;
-            border-radius: 20px;
-            max-width: 600px;
-            padding: 30px;
-            color: #C1C1C1;
-            position: relative;
-            animation: scaleIn 0.4s ease forwards;
-        }
+.project-card.popout {
+    /* no static transform */
+}
 
-        #modal h3 {
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            color: #B983FF;
-            margin-bottom: 1rem;
-        }
+/* Hover scale smaller so it doesn't conflict with center card scaling */
+.project-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px #00F0FFaa;
+    z-index: 1;
+}
 
-        #modal p {
-            line-height: 1.5;
-            color: #FFD6EC;
-        }
+/* Other styles remain the same */
+.project-img {
+    width: 100%;
+    height: 160px;
+    background-size: cover;
+    background-position: center;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
 
-        #modal .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            background: transparent;
-            border: none;
-            color: #00F0FF;
-            font-size: 2rem;
-            cursor: pointer;
-            font-weight: 700;
-            transition: color 0.3s ease;
-        }
+.project-title {
+    font-size: 1.2rem;
+    margin: 0.5rem 1rem 0 1rem;
+    color: #00fff3;
+}
 
-        #modal .close-btn:hover {
-            color: #B983FF;
-        }
+.project-desc {
+    font-size: 0.9rem;
+    margin: 0.25rem 1rem 1rem 1rem;
+    color: #ccc;
+}
 
-        @keyframes scaleIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.7);
-            }
+.btn-view {
+    margin: 0 1rem 1rem 1rem;
+    padding: 0.4rem 0.8rem;
+    background-color: #7833ff;
+    color: #ecf4f3;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
 
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
+.btn-view:hover,
+.btn-view:focus {
+    background-color: #5926cc;
+    outline: none;
+}
+
+/* Modal styles unchanged */
+#modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+#modal.active {
+    display: flex;
+}
+
+#modal .modal-content {
+    background: #0A0F2C;
+    border-radius: 20px;
+    max-width: 600px;
+    padding: 30px;
+    color: #C1C1C1;
+    position: relative;
+    animation: scaleIn 0.4s ease forwards;
+}
+
+#modal h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    color: #B983FF;
+    margin-bottom: 1rem;
+}
+
+#modal p {
+    line-height: 1.5;
+    color: #FFD6EC;
+}
+
+#modal .close-btn {
+    position: absolute;
+    top: 15px; right: 20px;
+    background: transparent;
+    border: none;
+    color: #00F0FF;
+    font-size: 2rem;
+    cursor: pointer;
+    font-weight: 700;
+    transition: color 0.3s ease;
+}
+
+#modal .close-btn:hover {
+    color: #B983FF;
+}
+
+@keyframes scaleIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.7);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 
         /* Services Section */
         #services {
@@ -842,89 +877,60 @@
 
         <section id="projects" aria-label="Projects portfolio section">
             <h2 class="section-title">My Projects</h2>
-            <div class="grid" role="list">
-                <div role="listitem" tabindex="0" class="project-card" data-title="Aurora App"
-                    data-desc="A futuristic mobile app for immersive aurora viewing with real-time weather and astronomy data."
-                    data-img="https://via.placeholder.com/600x400/7833ff/00fff3?text=Aurora+App">
-                    <div class="project-img"
-                        style="background-image:url('https://via.placeholder.com/600x400/7833ff/00fff3?text=Aurora+App');"
-                        aria-hidden="true"></div>
-                    <h3 class="project-title">Aurora App</h3>
-                    <p class="project-desc">Mobile app bringing aurora borealis experience to your fingertips.</p>
-                    <button class="btn-view" aria-label="View details about Aurora App">View Details</button>
-                </div>
-                <div role="listitem" tabindex="0" class="project-card" data-title="Neon Brand"
-                    data-desc="A glowing branding identity package for a high-tech startup, including logos, UI kits, and marketing material."
-                    data-img="https://via.placeholder.com/600x400/b983ff/00f0ff?text=Neon+Brand">
-                    <div class="project-img"
-                        style="background-image:url('https://via.placeholder.com/600x400/b983ff/00f0ff?text=Neon+Brand');"
-                        aria-hidden="true"></div>
-                    <h3 class="project-title">Neon Brand</h3>
-                    <p class="project-desc">Brand identity suite glowing with neon aesthetics.</p>
-                    <button class="btn-view" aria-label="View details about Neon Brand">View Details</button>
-                </div>
-                <div role="listitem" tabindex="0" class="project-card" data-title="Electric UI Kit"
-                    data-desc="A futuristic UI kit with electric lilac and neon aqua themes for web and mobile interfaces."
-                    data-img="https://via.placeholder.com/600x400/00f0ff/b983ff?text=Electric+UI+Kit">
-                    <div class="project-img"
-                        style="background-image:url('https://via.placeholder.com/600x400/00f0ff/b983ff?text=Electric+UI+Kit');"
-                        aria-hidden="true"></div>
-                    <h3 class="project-title">Electric UI Kit</h3>
-                    <p class="project-desc">Ready-to-use UI components with vibrant colors and animations.</p>
-                    <button class="btn-view" aria-label="View details about Electric UI Kit">View Details</button>
-                </div>
-                <div role="listitem" tabindex="0" class="project-card" data-title="Blush Pink Cosmetics"
-                    data-desc="Branding and website design for a luxury cosmetics line featuring soft blush pink aesthetics."
-                    data-img="https://via.placeholder.com/600x400/ffd6ec/0a0f2c?text=Blush+Pink+Cosmetics">
-                    <div class="project-img"
-                        style="background-image:url('https://via.placeholder.com/600x400/ffd6ec/0a0f2c?text=Blush+Pink+Cosmetics');"
-                        aria-hidden="true"></div>
-                    <h3 class="project-title">Blush Pink Cosmetics</h3>
-                    <p class="project-desc">Luxury cosmetics branding with warmth and elegance.</p>
-                    <button class="btn-view" aria-label="View details about Blush Pink Cosmetics">View Details</button>
-                </div>
-                <div role="listitem" tabindex="0" class="project-card" data-title="Chrome Tech Website"
-                    data-desc="Website design and development for a tech gadget maker using silver chrome highlights and metallic textures."
-                    data-img="https://via.placeholder.com/600x400/c1c1c1/0a0f2c?text=Chrome+Tech+Website">
-                    <div class="project-img"
-                        style="background-image:url('https://via.placeholder.com/600x400/c1c1c1/0a0f2c?text=Chrome+Tech+Website');"
-                        aria-hidden="true"></div>
-                    <h3 class="project-title">Chrome Tech Website</h3>
-                    <p class="project-desc">Sleek technology website with metallic sophistication.</p>
-                    <button class="btn-view" aria-label="View details about Chrome Tech Website">View Details</button>
-                </div>
-                <div role="listitem" tabindex="0" class="project-card" data-title="Midnight Navy Game UI"
-                    data-desc="User interface design for a sci-fi themed game with midnight navy and electric lilac colors."
-                    data-img="https://via.placeholder.com/600x400/0a0f2c/b983ff?text=Midnight+Navy+Game+UI">
-                    <div class="project-img"
-                        style="background-image:url('https://via.placeholder.com/600x400/0a0f2c/b983ff?text=Midnight+Navy+Game+UI');"
-                        aria-hidden="true"></div>
-                    <h3 class="project-title">Midnight Navy Game UI</h3>
-                    <p class="project-desc">UI/UX design for an immersive sci-fi gaming experience.</p>
-                    <button class="btn-view" aria-label="View details about Midnight Navy Game UI">View Details</button>
-                </div>
-                <div role="listitem" tabindex="0" class="project-card" data-title="Midnight Navy Game UI"
-                    data-desc="User interface design for a sci-fi themed game with midnight navy and electric lilac colors."
-                    data-img="https://via.placeholder.com/600x400/0a0f2c/b983ff?text=Midnight+Navy+Game+UI">
-                    <div class="project-img"
-                        style="background-image:url('https://via.placeholder.com/600x400/0a0f2c/b983ff?text=Midnight+Navy+Game+UI');"
-                        aria-hidden="true"></div>
-                    <h3 class="project-title">Midnight Navy Game UI</h3>
-                    <p class="project-desc">UI/UX design for an immersive sci-fi gaming experience.</p>
-                    <button class="btn-view" aria-label="View details about Midnight Navy Game UI">View Details</button>
-                </div>
-                <div role="listitem" tabindex="0" class="project-card" data-title="Midnight Navy Game UI"
-                    data-desc="User interface design for a sci-fi themed game with midnight navy and electric lilac colors."
-                    data-img="https://via.placeholder.com/600x400/0a0f2c/b983ff?text=Midnight+Navy+Game+UI">
-                    <div class="project-img"
-                        style="background-image:url('https://via.placeholder.com/600x400/0a0f2c/b983ff?text=Midnight+Navy+Game+UI');"
-                        aria-hidden="true"></div>
-                    <h3 class="project-title">Midnight Navy Game UI</h3>
-                    <p class="project-desc">UI/UX design for an immersive sci-fi gaming experience.</p>
-                    <button class="btn-view" aria-label="View details about Midnight Navy Game UI">View Details</button>
-                </div>
+            <div class="carousel" role="list" tabindex="0">
+              <div role="listitem" tabindex="0" class="project-card" data-title="Aurora App"
+                data-desc="A futuristic mobile app for immersive aurora viewing with real-time weather and astronomy data."
+                data-img="https://via.placeholder.com/600x400/7833ff/00fff3?text=Aurora+App">
+                <div class="project-img" style="background-image:url('https://via.placeholder.com/600x400/7833ff/00fff3?text=Aurora+App');" aria-hidden="true"></div>
+                <h3 class="project-title">Aurora App</h3>
+                <p class="project-desc">Mobile app bringing aurora borealis experience to your fingertips.</p>
+                <button class="btn-view" aria-label="View details about Aurora App">View Details</button>
+              </div>
+              <div role="listitem" tabindex="0" class="project-card" data-title="Neon Brand"
+                data-desc="A glowing branding identity package for a high-tech startup."
+                data-img="https://via.placeholder.com/600x400/b983ff/00f0ff?text=Neon+Brand">
+                <div class="project-img" style="background-image:url('https://via.placeholder.com/600x400/b983ff/00f0ff?text=Neon+Brand');" aria-hidden="true"></div>
+                <h3 class="project-title">Neon Brand</h3>
+                <p class="project-desc">Brand identity suite glowing with neon aesthetics.</p>
+                <button class="btn-view" aria-label="View details about Neon Brand">View Details</button>
+              </div>
+              <div role="listitem" tabindex="0" class="project-card" data-title="Electric UI Kit"
+                data-desc="A futuristic UI kit with electric lilac and neon aqua themes."
+                data-img="https://via.placeholder.com/600x400/00f0ff/b983ff?text=Electric+UI+Kit">
+                <div class="project-img" style="background-image:url('https://via.placeholder.com/600x400/00f0ff/b983ff?text=Electric+UI+Kit');" aria-hidden="true"></div>
+                <h3 class="project-title">Electric UI Kit</h3>
+                <p class="project-desc">Ready-to-use UI components with vibrant colors.</p>
+                <button class="btn-view" aria-label="View details about Electric UI Kit">View Details</button>
+              </div>
+              <div role="listitem" tabindex="0" class="project-card" data-title="Blush Pink Cosmetics"
+                data-desc="Luxury branding for a cosmetics line with blush pink tones."
+                data-img="https://via.placeholder.com/600x400/ffd6ec/0a0f2c?text=Blush+Pink+Cosmetics">
+                <div class="project-img" style="background-image:url('https://via.placeholder.com/600x400/ffd6ec/0a0f2c?text=Blush+Pink+Cosmetics');" aria-hidden="true"></div>
+                <h3 class="project-title">Blush Pink Cosmetics</h3>
+                <p class="project-desc">Luxury cosmetics branding with warmth and elegance.</p>
+                <button class="btn-view" aria-label="View details about Blush Pink Cosmetics">View Details</button>
+              </div>
+              <div role="listitem" tabindex="0" class="project-card" data-title="Chrome Tech Website"
+                data-desc="Tech website with chrome and metallic textures."
+                data-img="https://via.placeholder.com/600x400/c1c1c1/0a0f2c?text=Chrome+Tech+Website">
+                <div class="project-img" style="background-image:url('https://via.placeholder.com/600x400/c1c1c1/0a0f2c?text=Chrome+Tech+Website');" aria-hidden="true"></div>
+                <h3 class="project-title">Chrome Tech Website</h3>
+                <p class="project-desc">Sleek technology website with metallic sophistication.</p>
+                <button class="btn-view" aria-label="View details about Chrome Tech Website">View Details</button>
+              </div>
             </div>
-        </section>
+          </section>
+        
+          <div id="modal">
+            <div class="modal-content">
+              <button class="close-btn" id="modal-close">&times;</button>
+              <h3 id="modal-title"></h3>
+              <img id="modal-img" src="" alt="" style="width: 100%; border-radius: 10px; margin-bottom: 1rem;">
+              <p id="modal-desc"></p>
+            </div>
+          </div>
+
+
 
 
 
@@ -1080,39 +1086,197 @@
         // Trigger on load in case already in view
         animateCounters();
 
-        // Projects Modal
-        const modal = document.getElementById('modal');
-        const modalTitle = document.getElementById('modal-title');
-        const modalDesc = document.getElementById('modal-desc');
-        const modalImg = document.getElementById('modal-img');
-        const modalClose = document.getElementById('modal-close');
+        // Modal Elements
+const modal = document.getElementById('modal');
+const modalTitle = document.getElementById('modal-title');
+const modalDesc = document.getElementById('modal-desc');
+const modalImg = document.getElementById('modal-img');
+const modalClose = document.getElementById('modal-close');
 
-        document.querySelectorAll('.project-card').forEach(card => {
-            card.querySelector('.btn-view').addEventListener('click', () => {
-                openModal(card);
-            });
-            card.addEventListener('keyup', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    openModal(card);
-                }
-            });
-        });
-        modalClose.addEventListener('click', closeModal);
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeModal();
-        });
+function openModal(card) {
+    modalTitle.textContent = card.getAttribute('data-title');
+    modalDesc.textContent = card.getAttribute('data-desc');
+    modalImg.src = card.getAttribute('data-img');
+    modalImg.alt = card.getAttribute('data-title') + " project image";
+    modal.classList.add('active');
+    modalClose.focus();
+}
 
-        function openModal(card) {
-            modalTitle.textContent = card.getAttribute('data-title');
-            modalDesc.textContent = card.getAttribute('data-desc');
-            modalImg.src = card.getAttribute('data-img');
-            modalImg.alt = card.getAttribute('data-title') + " project image";
-            modal.classList.add('active');
-            modalClose.focus();
+function closeModal() {
+    modal.classList.remove('active');
+}
+
+modalClose.addEventListener('click', closeModal);
+modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+});
+
+// Attach modal events to each card button
+document.querySelectorAll('.project-card').forEach(card => {
+    card.querySelector('.btn-view').addEventListener('click', () => {
+        openModal(card);
+    });
+    card.addEventListener('keyup', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            openModal(card);
         }
-        function closeModal() {
-            modal.classList.remove('active');
+    });
+});
+
+// Swipe & Drag carousel
+const carousel = document.querySelector('.carousel');
+let isDragging = false, startX, scrollLeft;
+
+carousel.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    carousel.classList.add('dragging');
+    startX = e.pageX - carousel.offsetLeft;
+    scrollLeft = carousel.scrollLeft;
+});
+
+carousel.addEventListener('mouseleave', () => {
+    isDragging = false;
+    carousel.classList.remove('dragging');
+});
+
+carousel.addEventListener('mouseup', () => {
+    isDragging = false;
+    carousel.classList.remove('dragging');
+});
+
+carousel.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - carousel.offsetLeft;
+    const walk = (x - startX) * 1.5; // scroll speed
+    carousel.scrollLeft = scrollLeft - walk;
+});
+
+carousel.addEventListener('touchstart', (e) => {
+    isDragging = true;
+    startX = e.touches[0].pageX - carousel.offsetLeft;
+    scrollLeft = carousel.scrollLeft;
+});
+
+carousel.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    const x = e.touches[0].pageX - carousel.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    carousel.scrollLeft = scrollLeft - walk;
+});
+
+carousel.addEventListener('touchend', () => {
+    isDragging = false;
+});
+
+// Updated function to update arc effect
+function updateCarousel() {
+    const cards = document.querySelectorAll('.project-card');
+    const carouselRect = carousel.getBoundingClientRect();
+    const carouselCenterX = carouselRect.left + carouselRect.width / 2;
+
+    // Arc effect params
+    const maxRotation = 60; // degrees max rotation on Y axis
+    const maxTranslateZ = 150; // max pop forward in px
+    const maxDistance = carouselRect.width / 2 + 200; // max distance considered for effect
+
+    // Detect scroll boundaries
+    const maxScrollLeft = carousel.scrollWidth - carousel.clientWidth;
+    const currentScroll = carousel.scrollLeft;
+
+    cards.forEach(card => {
+        const cardRect = card.getBoundingClientRect();
+        const cardCenterX = cardRect.left + cardRect.width / 2;
+
+        // Distance from carousel center
+        let distanceX = cardCenterX - carouselCenterX;
+
+        if (distanceX > maxDistance) distanceX = maxDistance;
+        if (distanceX < -maxDistance) distanceX = -maxDistance;
+
+        // Normalize
+        const normDistance = distanceX / maxDistance;
+
+        // Calculate transform values
+        const rotateY = -normDistance * maxRotation;
+        const translateZ = (1 - Math.abs(normDistance)) * maxTranslateZ;
+        const scale = 0.7 + (1 - Math.abs(normDistance)) * 0.3;
+        const zIndex = Math.round((1 - Math.abs(normDistance)) * 100);
+
+        card.style.transform = `
+            perspective(1000px)
+            translateZ(${translateZ}px)
+            rotateY(${rotateY}deg)
+            scale(${scale})
+        `;
+        card.style.zIndex = zIndex;
+
+        card.classList.remove('popout'); // reset
+
+        // Near center logic
+        if (Math.abs(normDistance) < 0.15) {
+            card.classList.add('popout');
         }
+    });
+
+    // Special handling for first and last cards on edges
+    if (currentScroll <= 10) {
+        // At left edge, force first card popout
+        cards[0].classList.add('popout');
+        cards[0].style.transform = `
+            perspective(1000px)
+            translateZ(${maxTranslateZ}px)
+            rotateY(0deg)
+            scale(1)
+        `;
+        cards[0].style.zIndex = 100;
+    }
+    if (currentScroll >= maxScrollLeft - 10) {
+        // At right edge, force last card popout
+        const lastCard = cards[cards.length - 1];
+        lastCard.classList.add('popout');
+        lastCard.style.transform = `
+            perspective(1000px)
+            translateZ(${maxTranslateZ}px)
+            rotateY(0deg)
+            scale(1)
+        `;
+        lastCard.style.zIndex = 100;
+    }
+}
+
+// Add padding to carousel ends for centering edge cards
+function updateCarouselPadding() {
+    const cards = document.querySelectorAll('.project-card');
+    if (cards.length === 0) return;
+
+    const carouselWidth = carousel.offsetWidth;
+    const cardWidth = cards[0].offsetWidth;
+    const sidePadding = (carouselWidth / 2) - (cardWidth / 2);
+    carousel.style.paddingLeft = sidePadding + 'px';
+    carousel.style.paddingRight = sidePadding + 'px';
+}
+
+carousel.addEventListener('scroll', updateCarousel);
+window.addEventListener('resize', () => {
+    updateCarouselPadding();
+    updateCarousel();
+});
+
+window.addEventListener('load', () => {
+    updateCarouselPadding();
+
+    // Center first card on load
+    const cards = document.querySelectorAll('.project-card');
+    if (cards.length > 0) {
+        const carouselCenter = carousel.offsetWidth / 2;
+        const firstCardCenter = cards[0].offsetLeft + cards[0].offsetWidth / 2;
+        carousel.scrollLeft = firstCardCenter - carouselCenter;
+    }
+
+    updateCarousel();
+});
+
 
         // Testimonials rotation
         const testimonialEls = document.querySelectorAll('.testimonial');
