@@ -366,25 +366,28 @@
 
         /* Card Styling */
         .project-card {
-            flex: 0 0 256px;
-            scroll-snap-align: center;
-            background: #1a1a2e;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
-            cursor: pointer;
-            position: relative;
-            z-index: 0;
-            opacity: 0.4;
-            /* non-popout default */
-        }
+    flex: 0 0 256px;
+    scroll-snap-align: center;
+    background: #1a1a2e;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: 
+        transform 0.3s ease, 
+        box-shadow 0.3s ease, 
+        opacity 0.3s ease;  /* Add smooth opacity transition */
+    cursor: pointer;
+    position: relative;
+    z-index: 0;
+    opacity: 0.4; /* faded by default */
+}
 
-        .project-card.popout {
-            transform: scale(1.05) translateY(-10px);
-            opacity: 1;
-            z-index: 1;
-            box-shadow: 0 10px 30px #00F0FF88;
-        }
+.project-card.popout {
+    transform: scale(1.05) translateY(-10px);
+    opacity: 1;  /* fully visible */
+    z-index: 1;
+    box-shadow: 0 10px 30px #00F0FF88;
+}
+
 
         /* Image inside card */
         .project-img {
