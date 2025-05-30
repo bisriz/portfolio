@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="google-site-verification" content="Qq-_2hd-vXAexQ3FwmE-bZM_7v6tA_4kxPkl2khAM1A" />
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/smooth-scrollbar@8.8.4/dist/smooth-scrollbar.js"></script>
 
     <link rel="icon" href="logo.jpg" type="image/jpeg">
 
@@ -334,65 +334,44 @@
         }
 
         /* Projects Section */
-        .carousel {
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            scroll-behavior: smooth;
-            /* Smooth programmatic scrolling */
-            -webkit-overflow-scrolling: touch;
-            /* Momentum scrolling on iOS */
-            overscroll-behavior-x: contain;
-            gap: 1rem;
-            padding: 7rem calc(50vw - 128px);
-            /* centers first card */
-            scrollbar-width: none;
-        }
-
-        .carousel::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* Projects Container */
         #projects {
-            padding: 80px 0 100px;
-            background: #0A0F2C;
-        }
+  padding: 80px 0 100px;
+  background: #0A0F2C;
+}
 
-        #projects .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 30px;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
+#scroll-wrapper {
+  height: auto;
+  overflow: hidden;
+  position: relative;
+}
 
-        /* Card Styling */
-        .project-card {
-            flex: 0 0 256px;
-            scroll-snap-align: center;
-            background: #1a1a2e;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition:
-                transform 0.3s ease,
-                box-shadow 0.3s ease,
-                opacity 0.3s ease;
-            /* Add smooth opacity transition */
-            cursor: pointer;
-            position: relative;
-            z-index: 0;
-            opacity: 0.4;
-            /* faded by default */
-        }
+.carousel {
+  display: flex;
+  width: max-content;
+  scroll-snap-type: x mandatory;
+  gap: 1rem;
+  padding: 7rem calc(50vw - 128px);
+}
 
-        .project-card.popout {
-            transform: scale(1.05) translateY(-10px);
-            opacity: 1;
-            /* fully visible */
-            z-index: 1;
-            box-shadow: 0 10px 30px #00F0FF88;
-        }
+.project-card {
+  flex: 0 0 256px;
+  scroll-snap-align: center;
+  background: #1a1a2e;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+.project-card.popout {
+  transform: scale(1.05) translateY(-10px);
+  opacity: 1;
+  z-index: 1;
+  box-shadow: 0 10px 30px #00F0FF88;
+}
 
 
         /* Image inside card */
@@ -881,7 +860,10 @@
 
         <section id="projects" aria-label="Projects portfolio section">
             <h2 class="section-title">My Projects</h2>
-            <div class="carousel" role="list" tabindex="0">
+          
+            <!-- Wrapper for Smooth Scrollbar -->
+            <div id="scroll-wrapper">
+              <div class="carousel" role="list" tabindex="0">
                 <!-- Project 1 -->
                 <div role="listitem" tabindex="0" class="project-card" data-title="Aurora App"
                     data-desc="A futuristic mobile app for immersive aurora viewing with real-time weather and astronomy data."
@@ -959,12 +941,12 @@
         <!-- Modal -->
         <div id="modal">
             <div class="modal-content">
-                <button id="modal-close" class="close-btn" aria-label="Close modal">&times;</button>
-                <h3 id="modal-title"></h3>
-                <img id="modal-img" src="" alt="" style="width: 100%; border-radius: 12px; margin-bottom: 1rem;" />
-                <p id="modal-desc"></p>
+              <button id="modal-close" class="close-btn" aria-label="Close modal">&times;</button>
+              <h3 id="modal-title"></h3>
+              <img id="modal-img" src="" alt="" style="width: 100%; border-radius: 12px; margin-bottom: 1rem;" />
+              <p id="modal-desc"></p>
             </div>
-        </div>
+          </div>
 
 
 
@@ -1157,65 +1139,30 @@
         });
 
         document.querySelectorAll('.project-card').forEach(card => {
-    const btn = card.querySelector('.btn-view');
-    btn.addEventListener('click', () => openModal(card));
-    card.addEventListener('keyup', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') openModal(card);
-    });
+            const btn = card.querySelector('.btn-view');
+            btn.addEventListener('click', () => openModal(card));
+            card.addEventListener('keyup', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') openModal(card);
+            });
+        });
+
+        // Carousel logic
+        // Initialize Smooth Scrollbar
+const wrapper = document.querySelector('#scroll-wrapper');
+const scrollbar = Scrollbar.init(wrapper, {
+    damping: 0.08,
+    renderByPixels: true,
+    continuousScrolling: true
 });
 
-// Carousel logic
-const carousel = document.querySelector('.carousel');
-let isDragging = false, startX, scrollLeft;
+const carousel = wrapper.querySelector('.carousel');
 
-carousel.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    startX = e.pageX - carousel.offsetLeft;
-    scrollLeft = carousel.scrollLeft;
-    carousel.classList.add('dragging');
-});
-
-carousel.addEventListener('mouseleave', () => {
-    isDragging = false;
-    carousel.classList.remove('dragging');
-});
-
-carousel.addEventListener('mouseup', () => {
-    isDragging = false;
-    carousel.classList.remove('dragging');
-});
-
-carousel.addEventListener('mousemove', (e) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    const x = e.pageX - carousel.offsetLeft;
-    const walk = (x - startX) * 0.8;  // reduced multiplier for smoother drag on phones
-    carousel.scrollLeft = scrollLeft - walk;
-});
-
-carousel.addEventListener('touchstart', (e) => {
-    isDragging = true;
-    startX = e.touches[0].pageX - carousel.offsetLeft;
-    scrollLeft = carousel.scrollLeft;
-});
-
-carousel.addEventListener('touchmove', (e) => {
-    if (!isDragging) return;
-    const x = e.touches[0].pageX - carousel.offsetLeft;
-    const walk = (x - startX) * 0.8;  // reduced multiplier for smoother drag
-    carousel.scrollLeft = scrollLeft - walk;
-});
-
-carousel.addEventListener('touchend', () => {
-    isDragging = false;
-});
-
-// Highlight center card and fade others
+// Highlight center card
 function highlightCenterCard() {
     const cards = document.querySelectorAll('.project-card');
     let minDiff = Infinity;
     let centerCard = null;
-    const center = carousel.scrollLeft + (carousel.offsetWidth / 2);
+    const center = scrollbar.offset.x + (wrapper.offsetWidth / 2);
 
     cards.forEach(card => {
         const cardCenter = card.offsetLeft + (card.offsetWidth / 2);
@@ -1228,31 +1175,33 @@ function highlightCenterCard() {
 
     cards.forEach(card => {
         card.classList.remove('popout');
-        card.style.opacity = '0.4';  // faded opacity for non-centered cards
-        card.style.transition = 'opacity 0.3s ease';
+        card.style.opacity = '0.4';
     });
 
     if (centerCard) {
         centerCard.classList.add('popout');
-        centerCard.style.opacity = '1'; // full opacity for center card
+        centerCard.style.opacity = '1';
     }
 }
 
-carousel.addEventListener('scroll', highlightCenterCard);
+scrollbar.addListener(() => {
+    highlightCenterCard();
+});
 
 window.addEventListener('resize', highlightCenterCard);
 
-// On load, scroll smoothly to center card
+// Scroll to center card on load
 window.addEventListener('load', () => {
     const cards = document.querySelectorAll('.project-card');
-    if(cards.length) {
+    if (cards.length) {
         const centerIndex = Math.floor(cards.length / 2);
         const card = cards[centerIndex];
-        const scrollTo = card.offsetLeft - (carousel.offsetWidth / 2) + (card.offsetWidth / 2);
-        carousel.scrollTo({ left: scrollTo, behavior: 'smooth' });
+        const scrollTo = card.offsetLeft - (wrapper.offsetWidth / 2) + (card.offsetWidth / 2);
+        scrollbar.scrollTo(scrollTo, 0, 600);
     }
     highlightCenterCard();
 });
+
 
 
         // Testimonials rotation
